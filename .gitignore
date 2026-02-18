@@ -2,3 +2,11 @@ result
 
 .env
 .envrc
+
+**.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+.terraformrc
+terraform.rc
