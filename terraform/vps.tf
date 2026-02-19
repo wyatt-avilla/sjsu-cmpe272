@@ -19,7 +19,8 @@ resource "digitalocean_droplet" "cmpe272" {
     inline = [
       "export PATH=$PATH:/usr/bin",
       "sudo apt update",
-      "sudo apt install -y apache2"
+      "sudo apt install -y apache2",
+      "sudo apt install -y mysql-server",
     ]
   }
 }
