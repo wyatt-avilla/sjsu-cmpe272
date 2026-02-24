@@ -22,7 +22,12 @@
           };
         in
         {
-          default = pkgs.mkShell { packages = with pkgs; [ terraform ]; };
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              terraform
+              php
+            ];
+          };
         }
       );
     };
