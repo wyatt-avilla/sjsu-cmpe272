@@ -21,6 +21,9 @@ resource "digitalocean_droplet" "cmpe272" {
       "sudo apt update",
       "sudo apt install -y apache2",
       "sudo apt install -y mysql-server",
+      "sudo apt install php -y",
+      "sudo apt install libapache2-mod-php -y",
+      "sudo apt install php-mysql -y"
     ]
   }
 }
