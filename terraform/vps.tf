@@ -4,7 +4,8 @@ resource "digitalocean_droplet" "cmpe272" {
     region = "sfo2"
     size = "s-1vcpu-1gb"
     ssh_keys = [
-      data.digitalocean_ssh_key.desktop.id
+      data.digitalocean_ssh_key.desktop.id,
+      data.digitalocean_ssh_key.cmpe272.id,
     ]
 
   connection {

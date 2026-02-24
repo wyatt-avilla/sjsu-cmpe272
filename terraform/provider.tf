@@ -17,3 +17,7 @@ provider "digitalocean" {
 data "digitalocean_ssh_key" "desktop" {
   name = "desktop"
 }
+
+data "digitalocean_ssh_key" "cmpe272" {
+  name = "cmpe272"
+}
