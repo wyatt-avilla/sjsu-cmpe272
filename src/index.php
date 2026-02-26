@@ -1,3 +1,3 @@
 <?php
-  echo "<h1>hiiii from php</h1>";
+require './home.php';
 ?>
