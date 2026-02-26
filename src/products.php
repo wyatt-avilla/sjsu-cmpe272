@@ -1,7 +1,22 @@
 <html>
 <title>Products</title>
 <h1>Products</h1>
-<?php
-  echo "<p>products page</p>";
-?>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Price</th>
+  </tr>
+  <tr>
+    <td>Shovel</td>
+    <td>$10.99</td>
+  </tr>
+  <tr>
+    <td>Plow</td>
+    <td>$3000.00</td>
+  </tr>
+  <tr>
+    <td>Snowboard</td>
+    <td>$150.00</td>
+  </tr>
+</table>
 </html>
