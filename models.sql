@@ -1,0 +1,14 @@
+CREATE DATABASE IF NOT EXISTS cmpe272;
+
+USE cmpe272;
+
+CREATE TABLE IF NOT EXISTS users (
+    user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    is_admin BOOL NOT NULL DEFAULT false,
+
+    user_name VARCHAR(64) NOT NULL,
+    password_hash VARCHAR(64),
+
+    first_name VARCHAR(64) NOT NULL,
+    last_name VARCHAR(64) NOT NULL
+)
