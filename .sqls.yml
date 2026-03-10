@@ -1,0 +1,6 @@
+connections:
+  - alias: "local"
+    driver: "mysql"
+    dataSourceName: "wyatt@unix(/tmp/mysql.sock)/cmpe272"
+    params:
+    tmpdir: "/tmp"
