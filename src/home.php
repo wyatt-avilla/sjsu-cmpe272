@@ -6,5 +6,6 @@
 		<li><a href="products.php">Products</a></li>
 		<li><a href="news.php">News</a></li>
 		<li><a href="contacts/contacts.php">Contacts</a></li>
+		<li><a href="secure/login.php">Secure</a></li>
 	</ul>
 </html>
