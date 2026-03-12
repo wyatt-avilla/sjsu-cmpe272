@@ -4,7 +4,7 @@ function get_db() {
 	static $pdo = null;
 
 	if ($pdo === null) {
-		$env = parse_ini_file(__DIR__ . '/../../.env');
+		$env = parse_ini_file(__DIR__ . '/../.env');
 
 		$host = $env['DB_HOST'];
 		$dbname = $env['DB_NAME'];
