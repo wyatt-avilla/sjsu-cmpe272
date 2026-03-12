@@ -26,6 +26,8 @@
             packages = with pkgs; [
               terraform
               php
+              libargon2
+              just
             ];
           };
         }
