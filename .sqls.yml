@@ -1,6 +1,6 @@
 connections:
   - alias: "local"
     driver: "mysql"
-    dataSourceName: "wyatt@unix(/tmp/mysql.sock)/cmpe272"
+    dataSourceName: "root:rootpassword@tcp(127.0.0.1:3306)/app"
     params:
-    tmpdir: "/tmp"
+      tmpdir: "/tmp"
