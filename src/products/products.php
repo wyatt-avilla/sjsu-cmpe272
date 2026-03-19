@@ -35,25 +35,12 @@ foreach ($productPages as $productPage) {
 usort($products, function ($left, $right) {
     return strcmp($left['name'], $right['name']);
 });
-
-$recentProducts = get_recent_products();
 ?>
 
 <html>
 <title>Products</title>
 <h1>Products</h1>
-<?php if (!empty($recentProducts)): ?>
-<h2>Recently Viewed</h2>
-<ul>
-<?php foreach ($recentProducts as $product): ?>
-  <li>
-    <a href="<?php echo htmlspecialchars($product['path'], ENT_QUOTES, 'UTF-8'); ?>">
-      <?php echo htmlspecialchars($product['name'], ENT_QUOTES, 'UTF-8'); ?>
-    </a>
-  </li>
-<?php endforeach; ?>
-</ul>
-<?php endif; ?>
+<p><a href="./recently_viewed.php">View Recently Viewed Products</a></p>
 <h2>All Products</h2>
 <ul>
 <?php foreach ($products as $product): ?>
