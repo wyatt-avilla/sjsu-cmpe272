@@ -1,5 +1,5 @@
-<?
-require '../_lib.php';
+<?php
+require __DIR__ . '/../_lib.php';
 
 $tire_chains = new Product(
 	"Tire Chains",

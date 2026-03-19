@@ -1,5 +1,5 @@
-<?
-require '../_lib.php';
+<?php
+require __DIR__ . '/../_lib.php';
 
 $ice_pick = new Product(
 	"Ice Pick",
