@@ -28,6 +28,7 @@
               php
               libargon2
               just
+              mariadb.client
             ];
           };
         }
