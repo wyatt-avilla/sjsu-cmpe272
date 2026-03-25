@@ -14,21 +14,38 @@ foreach ($rows as $row) {
 }
 
 
-function fetch_url(string $url): ?string
+function fetch_url($url)
 {
 	$attempts = [$url];
 
-	if (str_starts_with($url, 'https://')) {
+	if (strpos($url, 'https://') === 0) {
 		$attempts[] = 'http://' . substr($url, strlen('https://'));
 	}
 
 	foreach ($attempts as $attemptUrl) {
-		$ch = curl_init($attemptUrl);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-		$response = curl_exec($ch);
-		$statusCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		curl_close($ch);
+		$response = null;
+		$statusCode = 0;
+
+		if (function_exists('curl_init')) {
+			$ch = curl_init($attemptUrl);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+			$response = curl_exec($ch);
+			$statusCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			curl_close($ch);
+		} else {
+			$context = stream_context_create([
+				'http' => [
+					'timeout' => 10,
+					'ignore_errors' => true,
+				],
+			]);
+			$response = @file_get_contents($attemptUrl, false, $context);
+
+			if (!empty($http_response_header) && preg_match('/\s(\d{3})\s/', $http_response_header[0], $matches)) {
+				$statusCode = (int) $matches[1];
+			}
+		}
 
 		if (is_string($response) && $response !== '' && $statusCode > 0 && $statusCode < 400) {
 			return $response;
@@ -38,7 +55,7 @@ function fetch_url(string $url): ?string
 	return null;
 }
 
-function append_names_from_json(mixed $value, array &$users): void
+function append_names_from_json($value, array &$users)
 {
 	if (!is_array($value)) {
 		return;
@@ -65,7 +82,7 @@ function append_names_from_json(mixed $value, array &$users): void
 	}
 }
 
-function append_response_users(string $response, array &$users): void
+function append_response_users($response, array &$users)
 {
 	$trimmed = trim($response);
 	if ($trimmed === '') {
