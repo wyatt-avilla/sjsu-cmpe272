@@ -9,5 +9,6 @@
 		<li><a href="users.php">Users</a></li>
 		<li><a href="secure/login.php">Secure</a></li>
 		<li><a href="bio.php">Bio</a></li>
+		<li><a href="multiple_company_users.php">User From Multiple Companies</a></li>
 	</ul>
 </html>
