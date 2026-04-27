@@ -10,5 +10,9 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(64),
 
     first_name VARCHAR(64) NOT NULL,
-    last_name VARCHAR(64) NOT NULL
+    last_name VARCHAR(64) NOT NULL,
+    email VARCHAR(64) NOT NULL,
+    home_address VARCHAR(64) NOT NULL,
+    home_phone VARCHAR(64) NOT NULL,
+    cell_phone VARCHAR(64) NOT NULL
 )
