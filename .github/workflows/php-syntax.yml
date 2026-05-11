@@ -1,0 +1,40 @@
+name: PHP Syntax
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    name: Check PHP syntax
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          coverage: none
+
+      - name: Check PHP syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          count=0
+          while IFS= read -r -d '' file; do
+            count=$((count + 1))
+            php -l "$file"
+          done < <(git ls-files -z '*.php')
+
+          if [ "$count" -eq 0 ]; then
+            echo "No PHP files found."
+          else
+            echo "Checked $count PHP files."
+          fi
