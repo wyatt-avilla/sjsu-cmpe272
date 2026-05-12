@@ -1,7 +1,4 @@
 <?php
-session_start();
+require_once __DIR__ . '/auth.php';
 
-if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
-	header('Location: login.php');
-	exit;
-}
+auth_require_admin('/secure/login.php');

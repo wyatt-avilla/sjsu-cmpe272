@@ -1,8 +1,11 @@
 <?php
+require_once __DIR__ . '/../secure/auth.php';
 require_once __DIR__ . '/companies/wyatt_company.php';
 require_once __DIR__ . '/companies/lucas_company.php';
 require_once __DIR__ . '/companies/robbie_company.php';
 require_once __DIR__ . '/companies/andrew_company.php';
+
+auth_start_session();
 
 $companies = [
 	wyatt_company_get_data(),
@@ -23,7 +26,12 @@ function escape_html($value) {
 </head>
 <body>
 	<header>
-		<a href="/term_project/todo.php">Login</a>
+		<?php if (auth_is_logged_in()): ?>
+			<span>Signed in as <?php echo escape_html(auth_current_user_name()); ?></span>
+			<a href="/secure/logout.php?redirect=/term_project/">Logout</a>
+		<?php else: ?>
+			<a href="/secure/login.php?redirect=/term_project/">Login</a>
+		<?php endif; ?>
 		<h1>Cross Domain Enterprise Online Market Place</h1>
 	</header>
 
