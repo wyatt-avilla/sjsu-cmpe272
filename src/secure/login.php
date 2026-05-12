@@ -6,6 +6,8 @@ $redirect_param_value = is_array($redirect_param) ? '' : trim((string) $redirect
 $redirect = auth_safe_redirect($redirect_param_value, 'users.php');
 $redirect_was_requested = $redirect_param_value !== '' && $redirect === $redirect_param_value;
 $redirect_input_value = $redirect_was_requested ? htmlspecialchars($redirect, ENT_QUOTES, 'UTF-8') : '';
+$create_account_url = '/term_project/create_account.php?redirect=' . rawurlencode($redirect);
+$show_create_account = $redirect === '/term_project' || strpos($redirect, '/term_project/') === 0;
 
 if (auth_is_logged_in()) {
 	if (!$redirect_was_requested && !auth_is_admin()) {
@@ -48,6 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		<input type="password" id="password" name="password" required><br><br>
 		<input type="submit" value="Login">
 	</form>
+
+	<?php if ($show_create_account): ?>
+		<p>Need an account? <a href="<?php echo htmlspecialchars($create_account_url, ENT_QUOTES, 'UTF-8'); ?>">Create Account</a></p>
+	<?php endif; ?>
 
 	<?php if ($error): ?>
 		<p style="color: red;"><?php echo htmlspecialchars($error); ?></p>

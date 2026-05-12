@@ -31,6 +31,7 @@ function escape_html($value) {
 			<a href="/secure/logout.php?redirect=/term_project/">Logout</a>
 		<?php else: ?>
 			<a href="/secure/login.php?redirect=/term_project/">Login</a>
+			<a href="/term_project/create_account.php?redirect=/term_project/">Create Account</a>
 		<?php endif; ?>
 		<h1>Cross Domain Enterprise Online Market Place</h1>
 	</header>
