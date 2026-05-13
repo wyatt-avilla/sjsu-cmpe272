@@ -66,6 +66,12 @@ function auth_current_user_name() {
 	return $_SESSION['user_name'] ?? null;
 }
 
+function auth_current_user_id() {
+	auth_start_session();
+
+	return $_SESSION['user_id'] ?? null;
+}
+
 function auth_require_admin($login_path = '/secure/login.php') {
 	if (!auth_is_logged_in() || !auth_is_admin()) {
 		header('Location: ' . $login_path);

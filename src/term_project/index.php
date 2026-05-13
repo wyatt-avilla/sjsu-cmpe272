@@ -82,9 +82,11 @@ $average_ratings = term_project_get_product_average_ratings();
 	<header>
 		<?php if (auth_is_logged_in()): ?>
 			<span>Signed in as <?php echo escape_html(auth_current_user_name()); ?></span>
+			<a href="/term_project/tracking.php">Tracking Stats</a>
 			<a href="/term_project/reviews.php">Add Review</a>
 			<a href="/secure/logout.php?redirect=/term_project/">Logout</a>
 		<?php else: ?>
+			<a href="/term_project/tracking.php">Tracking Stats</a>
 			<a href="/secure/login.php?redirect=/term_project/">Login</a>
 			<a href="/term_project/create_account.php?redirect=/term_project/">Create Account</a>
 			<a href="/term_project/reviews.php">Add Review</a>
@@ -126,10 +128,15 @@ $average_ratings = term_project_get_product_average_ratings();
 						<?php foreach ($company['products'] as $product): ?>
 							<?php
 							$product_company_name = $company['company_name'] ?? 'Unknown Company';
+							$track_url = '/term_project/track.php?' . http_build_query([
+								'company' => $product_company_name,
+								'product' => $product['title'] ?? 'Untitled Product',
+								'link' => $product['product_link'] ?? '#'
+							]);
 							$average_rating = term_project_get_average_rating_for_product($product_company_name, $product['product_link'] ?? '', $average_ratings);
 							?>
 							<li>
-								<a href="<?php echo escape_html($product['product_link'] ?? '#'); ?>">
+								<a href="<?php echo escape_html($track_url); ?>">
 									<?php echo escape_html($product['title'] ?? 'Untitled Product'); ?>
 								</a>
 								<span><?php echo term_project_format_average_rating($average_rating); ?></span>
