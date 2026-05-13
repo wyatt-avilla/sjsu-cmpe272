@@ -88,6 +88,11 @@ body.tp-page {
 	cursor: pointer;
 }
 
+.tp-page .tp-button,
+.tp-page .tp-submit {
+	color: var(--tp-text);
+}
+
 .tp-nav a:hover,
 .tp-nav a:focus,
 .tp-button:hover,
@@ -104,6 +109,11 @@ body.tp-page {
 	color: #ffffff;
 }
 
+.tp-page .tp-button-primary,
+.tp-page .tp-submit {
+	color: #ffffff;
+}
+
 .tp-submit:hover,
 .tp-submit:focus,
 .tp-button-primary:hover,
@@ -111,6 +121,13 @@ body.tp-page {
 	background: var(--tp-accent-dark);
 	color: #ffffff;
 	text-decoration: none;
+}
+
+.tp-page .tp-button-primary:hover,
+.tp-page .tp-button-primary:focus,
+.tp-page .tp-submit:hover,
+.tp-page .tp-submit:focus {
+	color: #ffffff;
 }
 
 .tp-main {
