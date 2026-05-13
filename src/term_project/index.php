@@ -17,6 +17,13 @@ $companies = [
 function escape_html($value) {
 	return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
+
+function format_visit_count($value) {
+	$count = (int) $value;
+	$label = $count === 1 ? 'visit' : 'visits';
+
+	return $count . ' ' . $label;
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -52,10 +59,31 @@ function escape_html($value) {
 								</a>
 							</li>
 						<?php endforeach; ?>
-					</ul>
-				<?php endif; ?>
-			</section>
-		<?php endforeach; ?>
-	</main>
+						</ul>
+					<?php endif; ?>
+
+					<?php if (array_key_exists('top_products', $company)): ?>
+						<section>
+							<h3>Top 5 Most Visited Products</h3>
+
+							<?php if (empty($company['top_products'])): ?>
+								<p>No product visit data available.</p>
+							<?php else: ?>
+								<ol>
+									<?php foreach ($company['top_products'] as $product): ?>
+										<li>
+											<a href="<?php echo escape_html($product['product_link'] ?? '#'); ?>">
+												<?php echo escape_html($product['title'] ?? 'Untitled Product'); ?>
+											</a>
+											<span><?php echo escape_html(format_visit_count($product['visit_count'] ?? 0)); ?></span>
+										</li>
+									<?php endforeach; ?>
+								</ol>
+							<?php endif; ?>
+						</section>
+					<?php endif; ?>
+				</section>
+			<?php endforeach; ?>
+		</main>
 </body>
 </html>
