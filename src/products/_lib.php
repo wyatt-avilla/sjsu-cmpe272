@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/tracking.php';
+
 define('RECENT_PRODUCTS_COOKIE', 'recent_products');
 define('RECENT_PRODUCTS_LIMIT', 5);
 
@@ -70,6 +72,8 @@ function track_recent_product($product) {
 	if ($productPath === null) {
 		return;
 	}
+
+	track_icedancer_product_visit($product->name, '/products/' . $productPath);
 
 	$recentProducts = get_recent_products();
 	$updatedProducts = [
