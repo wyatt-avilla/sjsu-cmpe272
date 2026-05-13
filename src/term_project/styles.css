@@ -321,6 +321,10 @@ body.tp-page {
 	max-width: 720px;
 }
 
+.tp-form-narrow {
+	max-width: 460px;
+}
+
 .tp-field {
 	display: grid;
 	gap: 6px;
@@ -405,6 +409,11 @@ body.tp-page {
 }
 
 .tp-user-id {
+	color: var(--tp-muted);
+}
+
+.tp-auth-link {
+	margin: 16px 0 0;
 	color: var(--tp-muted);
 }
 
