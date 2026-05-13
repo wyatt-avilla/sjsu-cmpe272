@@ -2,28 +2,58 @@
 
 function robbie_company_get_data() {
 	$api_url = getenv('ROBBIE_COMPANY_API_URL') ?: 'http://cmpe272.robbietambunting.com/amplif-ai/api/products.php';
-	
+
 	// Extract base site URL by removing the API path so links point to the correct directory
 	$site_url = str_replace('/api/products.php', '', $api_url);
-	
+	$data = robbie_company_empty_data();
+
+	$response = robbie_company_fetch_url($api_url);
+
+	if ($response !== '') {
+		$decoded = json_decode($response, true);
+
+		if (is_array($decoded) && isset($decoded['products']) && is_array($decoded['products'])) {
+			$data['company_name'] = trim((string) ($decoded['company_name'] ?? 'Robbie Company'));
+			$data['products'] = array_values(array_filter(array_map(function ($product) use ($site_url) {
+				return robbie_company_normalize_product($product, $site_url);
+			}, $decoded['products'])));
+		}
+	}
+
+	$data['top_products'] = robbie_company_get_most_visited_products($site_url);
+
+	return $data;
+}
+
+function robbie_company_get_most_visited_products($site_url = 'http://cmpe272.robbietambunting.com/amplif-ai') {
+	$api_url = getenv('ROBBIE_COMPANY_MOST_VISITED_API_URL') ?: 'http://cmpe272.robbietambunting.com/amplif-ai/api/most-visited.php';
 	$response = robbie_company_fetch_url($api_url);
 
 	if ($response === '') {
-		return robbie_company_empty_data();
+		return [];
 	}
 
 	$decoded = json_decode($response, true);
 
 	if (!is_array($decoded) || !isset($decoded['products']) || !is_array($decoded['products'])) {
-		return robbie_company_empty_data();
+		return [];
 	}
 
-	return [
-		'company_name' => trim((string) ($decoded['company_name'] ?? 'Robbie Company')),
-		'products' => array_values(array_filter(array_map(function ($product) use ($site_url) {
-			return robbie_company_normalize_product($product, $site_url);
-		}, $decoded['products']))),
-	];
+	$products = array_values(array_filter(array_map(function ($product) use ($site_url) {
+		return robbie_company_normalize_most_visited_product($product, $site_url);
+	}, $decoded['products'])));
+
+	usort($products, function ($left, $right) {
+		$visits = ($right['visit_count'] ?? 0) <=> ($left['visit_count'] ?? 0);
+
+		if ($visits !== 0) {
+			return $visits;
+		}
+
+		return strcasecmp($left['title'] ?? '', $right['title'] ?? '');
+	});
+
+	return array_slice($products, 0, 5);
 }
 
 function robbie_company_fetch_url($url) {
@@ -99,9 +129,25 @@ function robbie_company_normalize_product($product, $site_url = 'http://cmpe272.
 		'title' => $title,
 		'description' => $description,
 		'price' => is_numeric($product['price'] ?? null) ? (float) $product['price'] : null,
-		'image_link' => trim((string) ($product['image_url'] ?? '')),
+		'image_link' => trim((string) ($product['image_url'] ?? $product['image_link'] ?? '')),
 		'product_link' => $product_link,
 	];
+}
+
+function robbie_company_normalize_most_visited_product($product, $site_url = 'http://cmpe272.robbietambunting.com/amplif-ai') {
+	if (!is_array($product)) {
+		return null;
+	}
+
+	$normalized = robbie_company_normalize_product($product, $site_url);
+
+	if ($normalized === null) {
+		return null;
+	}
+
+	$normalized['visit_count'] = is_numeric($product['visit_count'] ?? null) ? (int) $product['visit_count'] : 0;
+
+	return $normalized;
 }
 
 function robbie_company_empty_data() {
