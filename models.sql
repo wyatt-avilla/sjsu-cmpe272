@@ -31,3 +31,22 @@ CREATE TABLE IF NOT EXISTS product_tracking (
     REFERENCES users (user_id)
     ON DELETE SET NULL
 );
+
+CREATE TABLE IF NOT EXISTS product_review (
+    product_review_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NULL,
+
+    company_name VARCHAR(128) NOT NULL,
+    product_name VARCHAR(255) NOT NULL,
+    product_link VARCHAR(2048) NOT NULL,
+    rating TINYINT UNSIGNED NOT NULL,
+    review_text TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT chk_product_review_rating
+    CHECK (rating BETWEEN 1 AND 5),
+    CONSTRAINT fk_product_review_user
+    FOREIGN KEY (user_id)
+    REFERENCES users (user_id)
+    ON DELETE SET NULL
+);

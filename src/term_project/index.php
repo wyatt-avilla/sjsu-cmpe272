@@ -4,6 +4,7 @@ require_once __DIR__ . '/companies/wyatt_company.php';
 require_once __DIR__ . '/companies/lucas_company.php';
 require_once __DIR__ . '/companies/robbie_company.php';
 require_once __DIR__ . '/companies/andrew_company.php';
+require_once __DIR__ . '/review_lib.php';
 
 auth_start_session();
 
@@ -69,6 +70,7 @@ function get_overall_top_products($companies, $limit = 5) {
 }
 
 $overall_top_products = get_overall_top_products($companies);
+$average_ratings = term_project_get_product_average_ratings();
 ?>
 <!doctype html>
 <html lang="en">
@@ -80,10 +82,12 @@ $overall_top_products = get_overall_top_products($companies);
 	<header>
 		<?php if (auth_is_logged_in()): ?>
 			<span>Signed in as <?php echo escape_html(auth_current_user_name()); ?></span>
+			<a href="/term_project/reviews.php">Add Review</a>
 			<a href="/secure/logout.php?redirect=/term_project/">Logout</a>
 		<?php else: ?>
 			<a href="/secure/login.php?redirect=/term_project/">Login</a>
 			<a href="/term_project/create_account.php?redirect=/term_project/">Create Account</a>
+			<a href="/term_project/reviews.php">Add Review</a>
 		<?php endif; ?>
 		<h1>Cross Domain Enterprise Online Market Place</h1>
 	</header>
@@ -97,12 +101,14 @@ $overall_top_products = get_overall_top_products($companies);
 			<?php else: ?>
 				<ol>
 					<?php foreach ($overall_top_products as $product): ?>
+						<?php $average_rating = term_project_get_average_rating_for_product($product['company_name'] ?? '', $product['product_link'] ?? '', $average_ratings); ?>
 						<li>
 							<a href="<?php echo escape_html($product['product_link'] ?? '#'); ?>">
 								<?php echo escape_html($product['title'] ?? 'Untitled Product'); ?>
 							</a>
 							<span><?php echo escape_html($product['company_name'] ?? 'Unknown Company'); ?></span>
 							<span><?php echo escape_html(format_visit_count($product['visit_count'] ?? 0)); ?></span>
+							<span><?php echo term_project_format_average_rating($average_rating); ?></span>
 						</li>
 					<?php endforeach; ?>
 				</ol>
@@ -118,10 +124,15 @@ $overall_top_products = get_overall_top_products($companies);
 				<?php else: ?>
 					<ul>
 						<?php foreach ($company['products'] as $product): ?>
+							<?php
+							$product_company_name = $company['company_name'] ?? 'Unknown Company';
+							$average_rating = term_project_get_average_rating_for_product($product_company_name, $product['product_link'] ?? '', $average_ratings);
+							?>
 							<li>
 								<a href="<?php echo escape_html($product['product_link'] ?? '#'); ?>">
 									<?php echo escape_html($product['title'] ?? 'Untitled Product'); ?>
 								</a>
+								<span><?php echo term_project_format_average_rating($average_rating); ?></span>
 							</li>
 						<?php endforeach; ?>
 					</ul>
@@ -136,11 +147,13 @@ $overall_top_products = get_overall_top_products($companies);
 						<?php else: ?>
 							<ol>
 								<?php foreach ($company['top_products'] as $product): ?>
+									<?php $average_rating = term_project_get_average_rating_for_product($company['company_name'] ?? 'Unknown Company', $product['product_link'] ?? '', $average_ratings); ?>
 									<li>
 										<a href="<?php echo escape_html($product['product_link'] ?? '#'); ?>">
 											<?php echo escape_html($product['title'] ?? 'Untitled Product'); ?>
 										</a>
 										<span><?php echo escape_html(format_visit_count($product['visit_count'] ?? 0)); ?></span>
+										<span><?php echo term_project_format_average_rating($average_rating); ?></span>
 									</li>
 								<?php endforeach; ?>
 							</ol>
