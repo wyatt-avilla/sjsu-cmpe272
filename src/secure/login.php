@@ -1,29 +1,35 @@
 <?php
-session_start();
-require_once 'get_db.php';
+require_once __DIR__ . '/auth.php';
 
-if (isset($_SESSION['user_id'])) {
-	header('Location: users.php');
+$redirect_param = $_GET['redirect'] ?? $_POST['redirect'] ?? '';
+$redirect_param_value = is_array($redirect_param) ? '' : trim((string) $redirect_param);
+$redirect = auth_safe_redirect($redirect_param_value, 'users.php');
+$redirect_was_requested = $redirect_param_value !== '' && $redirect === $redirect_param_value;
+$redirect_input_value = $redirect_was_requested ? htmlspecialchars($redirect, ENT_QUOTES, 'UTF-8') : '';
+$create_account_url = '/term_project/create_account.php?redirect=' . rawurlencode($redirect);
+$show_create_account = $redirect === '/term_project' || strpos($redirect, '/term_project/') === 0;
+
+if (auth_is_logged_in()) {
+	if (!$redirect_was_requested && !auth_is_admin()) {
+		$redirect = '/';
+	}
+
+	header('Location: ' . $redirect);
 	exit;
 }
 
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	$username = $_POST['username'];
-	$password = $_POST['password'];
+	$username = trim($_POST['username'] ?? '');
+	$password = $_POST['password'] ?? '';
 
-	$pdo = get_db();
+	if (auth_login($username, $password)) {
+		if (!$redirect_was_requested && !auth_is_admin()) {
+			$redirect = '/';
+		}
 
-	$stmt = $pdo->prepare('SELECT * FROM users WHERE user_name = ?');
-	$stmt->execute([$username]);
-	$user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-	if ($user && password_verify($password, $user['password_hash'])) {
-		$_SESSION['user_id'] = $user['user_id'];
-		$_SESSION['user_name'] = $user['user_name'];
-		$_SESSION['is_admin'] = $user['is_admin'];
-		header('Location: users.php');
+		header('Location: ' . $redirect);
 		exit;
 	} else {
 		$error = 'Invalid username or password';
@@ -37,12 +43,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 	<h1>Login</h1>
 	<form method="post" action="login.php">
+		<input type="hidden" name="redirect" value="<?php echo $redirect_input_value; ?>">
 		<label for="username">Username:</label>
 		<input type="text" id="username" name="username" required><br><br>
 		<label for="password">Password:</label>
 		<input type="password" id="password" name="password" required><br><br>
 		<input type="submit" value="Login">
 	</form>
+
+	<?php if ($show_create_account): ?>
+		<p>Need an account? <a href="<?php echo htmlspecialchars($create_account_url, ENT_QUOTES, 'UTF-8'); ?>">Create Account</a></p>
+	<?php endif; ?>
 
 	<?php if ($error): ?>
 		<p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
