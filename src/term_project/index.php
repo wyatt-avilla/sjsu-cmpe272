@@ -28,8 +28,10 @@ function escape_html($value) {
 	<header>
 		<?php if (auth_is_logged_in()): ?>
 			<span>Signed in as <?php echo escape_html(auth_current_user_name()); ?></span>
+			<a href="/term_project/tracking.php">Tracking Stats</a>
 			<a href="/secure/logout.php?redirect=/term_project/">Logout</a>
 		<?php else: ?>
+			<a href="/term_project/tracking.php">Tracking Stats</a>
 			<a href="/secure/login.php?redirect=/term_project/">Login</a>
 			<a href="/term_project/create_account.php?redirect=/term_project/">Create Account</a>
 		<?php endif; ?>
@@ -46,8 +48,15 @@ function escape_html($value) {
 				<?php else: ?>
 					<ul>
 						<?php foreach ($company['products'] as $product): ?>
+							<?php
+							$track_url = '/term_project/track.php?' . http_build_query([
+								'company' => $company['company_name'] ?? 'Unknown Company',
+								'product' => $product['title'] ?? 'Untitled Product',
+								'link' => $product['product_link'] ?? '#'
+							]);
+							?>
 							<li>
-								<a href="<?php echo escape_html($product['product_link'] ?? '#'); ?>">
+								<a href="<?php echo escape_html($track_url); ?>">
 									<?php echo escape_html($product['title'] ?? 'Untitled Product'); ?>
 								</a>
 							</li>

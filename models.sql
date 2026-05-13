@@ -24,10 +24,13 @@ CREATE TABLE IF NOT EXISTS product_tracking (
     company_name VARCHAR(64) NOT NULL,
     product_name VARCHAR(64) NOT NULL,
     product_link VARCHAR(2048) NOT NULL,
-    clicked_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    click_count INT NOT NULL DEFAULT 1,
+    clicked_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_product_tracking_user
     FOREIGN KEY (user_id)
     REFERENCES users (user_id)
-    ON DELETE SET NULL
+    ON DELETE SET NULL,
+
+    UNIQUE KEY uk_product_tracking (user_id, company_name, product_name)
 );
