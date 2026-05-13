@@ -41,60 +41,65 @@ function escape_html($value) {
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Tracking Statistics</title>
-	<style>
-		table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-		th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-		th { background-color: #f4f4f4; }
-	</style>
+	<link rel="stylesheet" href="/term_project/styles.css">
 </head>
-<body>
-	<header>
-		<a href="/term_project/">&larr; Back to Market Place</a>
-		<h1>Tracking Statistics</h1>
-		<p>Signed in as <?php echo escape_html(auth_current_user_name()); ?> <?php if ($is_admin) echo '(Admin)'; ?></p>
+<body class="tp-page">
+	<header class="tp-header">
+		<div class="tp-shell tp-header-inner">
+			<h1 class="tp-brand">Tracking Statistics</h1>
+			<nav class="tp-nav" aria-label="Tracking navigation">
+				<a href="/term_project/">Back to Market Place</a>
+				<span>Signed in as <?php echo escape_html(auth_current_user_name()); ?> <?php if ($is_admin) echo '(Admin)'; ?></span>
+			</nav>
+		</div>
 	</header>
 
-	<main>
-		<?php if (empty($tracking_data)): ?>
-			<p>No tracking data available.</p>
-		<?php else: ?>
-			<table>
-				<thead>
-					<tr>
-						<th>User</th>
-						<th>Company</th>
-						<th>Product</th>
-						<th>Link</th>
-						<th>Clicks</th>
-						<th>Last Clicked</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ($tracking_data as $row): ?>
+	<main class="tp-main">
+		<div class="tp-shell">
+			<?php if (empty($tracking_data)): ?>
+				<p class="tp-empty">No tracking data available.</p>
+			<?php else: ?>
+				<div class="tp-table-wrap">
+					<table class="tp-table">
+					<thead>
 						<tr>
-							<td>
-								<?php
-								if ($row['user_id'] === null || $row['user_id'] === '') {
-									echo '<em>Anonymous</em>';
-								} else {
-									echo escape_html($row['user_name'] ?? 'Unknown User');
-									if ($is_admin) {
-										echo ' <span style="color:#666;">(ID: ' . escape_html((string) $row['user_id']) . ')</span>';
-									}
-								}
-								?>
-							</td>
-							<td><?php echo escape_html($row['company_name']); ?></td>
-							<td><?php echo escape_html($row['product_name']); ?></td>
-							<td><a href="<?php echo escape_html($row['product_link']); ?>" target="_blank">Link</a></td>
-							<td><?php echo escape_html($row['click_count']); ?></td>
-							<td><?php echo escape_html($row['clicked_at']); ?></td>
+							<th>User</th>
+							<th>Company</th>
+							<th>Product</th>
+							<th>Link</th>
+							<th>Clicks</th>
+							<th>Last Clicked</th>
 						</tr>
-					<?php endforeach; ?>
-				</tbody>
-			</table>
-		<?php endif; ?>
+					</thead>
+					<tbody>
+						<?php foreach ($tracking_data as $row): ?>
+							<tr>
+								<td>
+									<?php
+									if ($row['user_id'] === null || $row['user_id'] === '') {
+										echo '<em>Anonymous</em>';
+									} else {
+										echo escape_html($row['user_name'] ?? 'Unknown User');
+										if ($is_admin) {
+											echo ' <span class="tp-user-id">(ID: ' . escape_html((string) $row['user_id']) . ')</span>';
+										}
+									}
+									?>
+								</td>
+								<td><?php echo escape_html($row['company_name']); ?></td>
+								<td><?php echo escape_html($row['product_name']); ?></td>
+								<td><a href="<?php echo escape_html($row['product_link']); ?>" target="_blank">Link</a></td>
+								<td><?php echo escape_html($row['click_count']); ?></td>
+								<td><?php echo escape_html($row['clicked_at']); ?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+					</table>
+				</div>
+			<?php endif; ?>
+		</div>
 	</main>
 </body>
 </html>

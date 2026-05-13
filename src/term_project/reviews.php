@@ -88,61 +88,74 @@ function h($value) {
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Product Reviews</title>
+	<link rel="stylesheet" href="/term_project/styles.css">
 </head>
-<body>
-	<header>
-		<a href="/term_project/">Marketplace</a>
-		<span>Signed in as <?php echo h(auth_current_user_name()); ?></span>
-		<a href="/secure/logout.php?redirect=/term_project/">Logout</a>
-		<h1>Product Reviews</h1>
+<body class="tp-page">
+	<header class="tp-header">
+		<div class="tp-shell tp-header-inner">
+			<h1 class="tp-brand">Product Reviews</h1>
+			<nav class="tp-nav" aria-label="Review navigation">
+				<a href="/term_project/">Marketplace</a>
+				<span>Signed in as <?php echo h(auth_current_user_name()); ?></span>
+				<a href="/secure/logout.php?redirect=/term_project/">Logout</a>
+			</nav>
+		</div>
 	</header>
 
-	<main>
-		<?php if (isset($_GET['created'])): ?>
-			<p style="color: green;">Review added successfully.</p>
-		<?php endif; ?>
+	<main class="tp-main">
+		<div class="tp-shell">
+			<?php if (isset($_GET['created'])): ?>
+				<p class="tp-message tp-message-success">Review added successfully.</p>
+			<?php endif; ?>
 
-		<?php if ($errors): ?>
-			<p style="color: red;"><?php echo h($errors['form'] ?? 'Please fix the errors below.'); ?></p>
-		<?php endif; ?>
+			<?php if ($errors): ?>
+				<p class="tp-message tp-message-error"><?php echo h($errors['form'] ?? 'Please fix the errors below.'); ?></p>
+			<?php endif; ?>
 
-		<?php if (empty($products)): ?>
-			<p>No products are available to review.</p>
-		<?php else: ?>
-			<form method="post" action="reviews.php">
-				<label for="product_key">Product:</label>
-				<select id="product_key" name="product_key" required>
-					<?php foreach ($products as $key => $product): ?>
-						<option value="<?php echo h($key); ?>" <?php echo $key === $values['product_key'] ? 'selected' : ''; ?>>
-							<?php echo h($product['company_name'] . ' - ' . $product['product_name']); ?>
-						</option>
-					<?php endforeach; ?>
-				</select>
-				<?php if (isset($errors['product_key'])): ?><span style="color: red;"><?php echo h($errors['product_key']); ?></span><?php endif; ?>
-				<br><br>
+			<?php if (empty($products)): ?>
+				<p class="tp-empty">No products are available to review.</p>
+			<?php else: ?>
+				<form class="tp-form tp-panel" method="post" action="reviews.php">
+					<div class="tp-field">
+						<label for="product_key">Product</label>
+						<select id="product_key" name="product_key" required>
+							<?php foreach ($products as $key => $product): ?>
+								<option value="<?php echo h($key); ?>" <?php echo $key === $values['product_key'] ? 'selected' : ''; ?>>
+									<?php echo h($product['company_name'] . ' - ' . $product['product_name']); ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+						<?php if (isset($errors['product_key'])): ?><span class="tp-field-error"><?php echo h($errors['product_key']); ?></span><?php endif; ?>
+					</div>
 
-				<label for="rating">Rating:</label>
-				<select id="rating" name="rating" required>
-					<option value="">Choose a rating</option>
-					<?php for ($rating = 1; $rating <= 5; $rating++): ?>
-						<option value="<?php echo $rating; ?>" <?php echo (string) $rating === $values['rating'] ? 'selected' : ''; ?>>
-							<?php echo $rating; ?> star<?php echo $rating === 1 ? '' : 's'; ?>
-						</option>
-					<?php endfor; ?>
-				</select>
-				<?php if (isset($errors['rating'])): ?><span style="color: red;"><?php echo h($errors['rating']); ?></span><?php endif; ?>
-				<br><br>
+					<div class="tp-field">
+						<label for="rating">Rating</label>
+						<select id="rating" name="rating" required>
+							<option value="">Choose a rating</option>
+							<?php for ($rating = 1; $rating <= 5; $rating++): ?>
+								<option value="<?php echo $rating; ?>" <?php echo (string) $rating === $values['rating'] ? 'selected' : ''; ?>>
+									<?php echo $rating; ?> star<?php echo $rating === 1 ? '' : 's'; ?>
+								</option>
+							<?php endfor; ?>
+						</select>
+						<?php if (isset($errors['rating'])): ?><span class="tp-field-error"><?php echo h($errors['rating']); ?></span><?php endif; ?>
+					</div>
 
-				<label for="review_text">Review:</label>
-				<input type="text" id="review_text" name="review_text" value="<?php echo h($values['review_text']); ?>" required>
-				<?php if (isset($errors['review_text'])): ?><span style="color: red;"><?php echo h($errors['review_text']); ?></span><?php endif; ?>
-				<br><br>
+					<div class="tp-field">
+						<label for="review_text">Review</label>
+						<textarea id="review_text" name="review_text" required><?php echo h($values['review_text']); ?></textarea>
+						<?php if (isset($errors['review_text'])): ?><span class="tp-field-error"><?php echo h($errors['review_text']); ?></span><?php endif; ?>
+					</div>
 
-				<input type="submit" value="Add Review">
-			</form>
+					<div>
+						<button class="tp-submit" type="submit">Add Review</button>
+					</div>
+				</form>
 
-		<?php endif; ?>
+			<?php endif; ?>
+		</div>
 	</main>
 </body>
 </html>

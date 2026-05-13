@@ -92,71 +92,90 @@ $login_url = '/secure/login.php?redirect=' . rawurlencode($redirect);
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Create Account</title>
+	<link rel="stylesheet" href="/term_project/styles.css">
 </head>
-<body>
-	<header>
-		<a href="/term_project/">Marketplace</a>
-		<h1>Create Account</h1>
+<body class="tp-page">
+	<header class="tp-header">
+		<div class="tp-shell tp-header-inner">
+			<h1 class="tp-brand">Create Account</h1>
+			<nav class="tp-nav" aria-label="Account navigation">
+				<a href="/term_project/">Marketplace</a>
+			</nav>
+		</div>
 	</header>
 
-	<main>
-		<?php if ($errors): ?>
-			<p style="color: red;">Please fix the errors below.</p>
-		<?php endif; ?>
+	<main class="tp-main">
+		<div class="tp-shell">
+			<?php if ($errors): ?>
+				<p class="tp-message tp-message-error">Please fix the errors below.</p>
+			<?php endif; ?>
 
-		<form method="post" action="create_account.php">
-			<input type="hidden" name="redirect" value="<?php echo $redirect_input_value; ?>">
+			<form class="tp-form tp-panel" method="post" action="create_account.php">
+				<input type="hidden" name="redirect" value="<?php echo $redirect_input_value; ?>">
 
-			<label for="user_name">Username:</label>
-			<input type="text" id="user_name" name="user_name" value="<?php echo h($values['user_name']); ?>" required>
-			<?php if (isset($errors['user_name'])): ?><span style="color: red;"><?php echo h($errors['user_name']); ?></span><?php endif; ?>
-			<br><br>
+				<div class="tp-field">
+					<label for="user_name">Username</label>
+					<input type="text" id="user_name" name="user_name" value="<?php echo h($values['user_name']); ?>" required>
+					<?php if (isset($errors['user_name'])): ?><span class="tp-field-error"><?php echo h($errors['user_name']); ?></span><?php endif; ?>
+				</div>
 
-			<label for="password">Password:</label>
-			<input type="password" id="password" name="password" required>
-			<?php if (isset($errors['password'])): ?><span style="color: red;"><?php echo h($errors['password']); ?></span><?php endif; ?>
-			<br><br>
+				<div class="tp-field">
+					<label for="password">Password</label>
+					<input type="password" id="password" name="password" required>
+					<?php if (isset($errors['password'])): ?><span class="tp-field-error"><?php echo h($errors['password']); ?></span><?php endif; ?>
+				</div>
 
-			<label for="password_confirm">Confirm Password:</label>
-			<input type="password" id="password_confirm" name="password_confirm" required>
-			<?php if (isset($errors['password_confirm'])): ?><span style="color: red;"><?php echo h($errors['password_confirm']); ?></span><?php endif; ?>
-			<br><br>
+				<div class="tp-field">
+					<label for="password_confirm">Confirm Password</label>
+					<input type="password" id="password_confirm" name="password_confirm" required>
+					<?php if (isset($errors['password_confirm'])): ?><span class="tp-field-error"><?php echo h($errors['password_confirm']); ?></span><?php endif; ?>
+				</div>
 
-			<label for="first_name">First Name:</label>
-			<input type="text" id="first_name" name="first_name" value="<?php echo h($values['first_name']); ?>" required>
-			<?php if (isset($errors['first_name'])): ?><span style="color: red;"><?php echo h($errors['first_name']); ?></span><?php endif; ?>
-			<br><br>
+				<div class="tp-field">
+					<label for="first_name">First Name</label>
+					<input type="text" id="first_name" name="first_name" value="<?php echo h($values['first_name']); ?>" required>
+					<?php if (isset($errors['first_name'])): ?><span class="tp-field-error"><?php echo h($errors['first_name']); ?></span><?php endif; ?>
+				</div>
 
-			<label for="last_name">Last Name:</label>
-			<input type="text" id="last_name" name="last_name" value="<?php echo h($values['last_name']); ?>" required>
-			<?php if (isset($errors['last_name'])): ?><span style="color: red;"><?php echo h($errors['last_name']); ?></span><?php endif; ?>
-			<br><br>
+				<div class="tp-field">
+					<label for="last_name">Last Name</label>
+					<input type="text" id="last_name" name="last_name" value="<?php echo h($values['last_name']); ?>" required>
+					<?php if (isset($errors['last_name'])): ?><span class="tp-field-error"><?php echo h($errors['last_name']); ?></span><?php endif; ?>
+				</div>
 
-			<label for="email">Email:</label>
-			<input type="email" id="email" name="email" value="<?php echo h($values['email']); ?>" required>
-			<?php if (isset($errors['email'])): ?><span style="color: red;"><?php echo h($errors['email']); ?></span><?php endif; ?>
-			<br><br>
+				<div class="tp-field">
+					<label for="email">Email</label>
+					<input type="email" id="email" name="email" value="<?php echo h($values['email']); ?>" required>
+					<?php if (isset($errors['email'])): ?><span class="tp-field-error"><?php echo h($errors['email']); ?></span><?php endif; ?>
+				</div>
 
-			<label for="home_address">Home Address:</label>
-			<input type="text" id="home_address" name="home_address" value="<?php echo h($values['home_address']); ?>" required>
-			<?php if (isset($errors['home_address'])): ?><span style="color: red;"><?php echo h($errors['home_address']); ?></span><?php endif; ?>
-			<br><br>
+				<div class="tp-field">
+					<label for="home_address">Home Address</label>
+					<input type="text" id="home_address" name="home_address" value="<?php echo h($values['home_address']); ?>" required>
+					<?php if (isset($errors['home_address'])): ?><span class="tp-field-error"><?php echo h($errors['home_address']); ?></span><?php endif; ?>
+				</div>
 
-			<label for="home_phone">Home Phone:</label>
-			<input type="text" id="home_phone" name="home_phone" value="<?php echo h($values['home_phone']); ?>" required>
-			<?php if (isset($errors['home_phone'])): ?><span style="color: red;"><?php echo h($errors['home_phone']); ?></span><?php endif; ?>
-			<br><br>
+				<div class="tp-field">
+					<label for="home_phone">Home Phone</label>
+					<input type="text" id="home_phone" name="home_phone" value="<?php echo h($values['home_phone']); ?>" required>
+					<?php if (isset($errors['home_phone'])): ?><span class="tp-field-error"><?php echo h($errors['home_phone']); ?></span><?php endif; ?>
+				</div>
 
-			<label for="cell_phone">Cell Phone:</label>
-			<input type="text" id="cell_phone" name="cell_phone" value="<?php echo h($values['cell_phone']); ?>" required>
-			<?php if (isset($errors['cell_phone'])): ?><span style="color: red;"><?php echo h($errors['cell_phone']); ?></span><?php endif; ?>
-			<br><br>
+				<div class="tp-field">
+					<label for="cell_phone">Cell Phone</label>
+					<input type="text" id="cell_phone" name="cell_phone" value="<?php echo h($values['cell_phone']); ?>" required>
+					<?php if (isset($errors['cell_phone'])): ?><span class="tp-field-error"><?php echo h($errors['cell_phone']); ?></span><?php endif; ?>
+				</div>
 
-			<input type="submit" value="Create Account">
-		</form>
+				<div>
+					<button class="tp-submit" type="submit">Create Account</button>
+				</div>
+			</form>
 
-		<p>Already have an account? <a href="<?php echo h($login_url); ?>">Login</a></p>
+			<p>Already have an account? <a href="<?php echo h($login_url); ?>">Login</a></p>
+		</div>
 	</main>
 </body>
 </html>
