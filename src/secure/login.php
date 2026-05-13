@@ -36,26 +36,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 }
 ?>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Login</title>
+	<link rel="stylesheet" href="/term_project/styles.css">
 </head>
-<body>
-	<h1>Login</h1>
-	<form method="post" action="login.php">
-		<input type="hidden" name="redirect" value="<?php echo $redirect_input_value; ?>">
-		<label for="username">Username:</label>
-		<input type="text" id="username" name="username" required><br><br>
-		<label for="password">Password:</label>
-		<input type="password" id="password" name="password" required><br><br>
-		<input type="submit" value="Login">
-	</form>
+<body class="tp-page">
+	<header class="tp-header">
+		<div class="tp-shell tp-header-inner">
+			<h1 class="tp-brand">Login</h1>
+			<?php if ($show_create_account): ?>
+				<nav class="tp-nav" aria-label="Login navigation">
+					<a href="/term_project/">Marketplace</a>
+					<a href="<?php echo htmlspecialchars($create_account_url, ENT_QUOTES, 'UTF-8'); ?>">Create Account</a>
+				</nav>
+			<?php endif; ?>
+		</div>
+	</header>
 
-	<?php if ($show_create_account): ?>
-		<p>Need an account? <a href="<?php echo htmlspecialchars($create_account_url, ENT_QUOTES, 'UTF-8'); ?>">Create Account</a></p>
-	<?php endif; ?>
+	<main class="tp-main">
+		<div class="tp-shell">
+			<?php if ($error): ?>
+				<p class="tp-message tp-message-error"><?php echo htmlspecialchars($error); ?></p>
+			<?php endif; ?>
 
-	<?php if ($error): ?>
-		<p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
-	<?php endif; ?>
+			<form class="tp-form tp-form-narrow tp-panel" method="post" action="login.php">
+				<input type="hidden" name="redirect" value="<?php echo $redirect_input_value; ?>">
+
+				<div class="tp-field">
+					<label for="username">Username</label>
+					<input type="text" id="username" name="username" required>
+				</div>
+
+				<div class="tp-field">
+					<label for="password">Password</label>
+					<input type="password" id="password" name="password" required>
+				</div>
+
+				<div>
+					<button class="tp-submit" type="submit">Login</button>
+				</div>
+			</form>
+
+			<?php if ($show_create_account): ?>
+				<p class="tp-auth-link">Need an account? <a href="<?php echo htmlspecialchars($create_account_url, ENT_QUOTES, 'UTF-8'); ?>">Create Account</a></p>
+			<?php endif; ?>
+		</div>
+	</main>
+</body>
 </html>
