@@ -2,22 +2,49 @@
 
 function andrew_company_get_data() {
 	$api_url = getenv('ANDREW_COMPANY_API_URL') ?: 'https://hyunseungsong.com/api/services.php';
+	$data = andrew_company_empty_data();
+	$response = andrew_company_fetch_url($api_url);
+
+	if ($response !== '') {
+		$decoded = json_decode($response, true);
+
+		if (is_array($decoded)) {
+			$data['products'] = array_values(array_filter(array_map('andrew_company_normalize_product', $decoded)));
+		}
+	}
+
+	$data['top_products'] = andrew_company_get_most_visited_products();
+
+	return $data;
+}
+
+function andrew_company_get_most_visited_products() {
+	$api_url = getenv('ANDREW_COMPANY_TOP_SERVICES_API_URL') ?: 'https://hyunseungsong.com/api/top_services.php';
 	$response = andrew_company_fetch_url($api_url);
 
 	if ($response === '') {
-		return andrew_company_empty_data();
+		return [];
 	}
 
 	$decoded = json_decode($response, true);
 
 	if (!is_array($decoded)) {
-		return andrew_company_empty_data();
+		return [];
 	}
 
-	return [
-		'company_name' => 'RIFTMIND',
-		'products' => array_values(array_filter(array_map('andrew_company_normalize_product', $decoded))),
-	];
+	$products = array_values(array_filter(array_map('andrew_company_normalize_most_visited_product', $decoded)));
+
+	usort($products, function ($left, $right) {
+		$visits = ($right['visit_count'] ?? 0) <=> ($left['visit_count'] ?? 0);
+
+		if ($visits !== 0) {
+			return $visits;
+		}
+
+		return strcasecmp($left['title'] ?? '', $right['title'] ?? '');
+	});
+
+	return array_slice($products, 0, 5);
 }
 
 function andrew_company_fetch_url($url) {
@@ -73,6 +100,22 @@ function andrew_company_normalize_product($product) {
 		'image_link' => andrew_company_absolute_url(trim((string) ($product['image_link'] ?? ''))),
 		'product_link' => $product_link,
 	];
+}
+
+function andrew_company_normalize_most_visited_product($product) {
+	if (!is_array($product)) {
+		return null;
+	}
+
+	$normalized = andrew_company_normalize_product($product);
+
+	if ($normalized === null) {
+		return null;
+	}
+
+	$normalized['visit_count'] = is_numeric($product['visit_count'] ?? null) ? (int) $product['visit_count'] : 0;
+
+	return $normalized;
 }
 
 function andrew_company_absolute_url($path) {
