@@ -13,7 +13,7 @@ function robbie_company_get_data() {
 		$decoded = json_decode($response, true);
 
 		if (is_array($decoded) && isset($decoded['products']) && is_array($decoded['products'])) {
-			$data['company_name'] = trim((string) ($decoded['company_name'] ?? 'Robbie Company'));
+			$data['company_name'] = 'Amplif AI';
 			$data['products'] = array_values(array_filter(array_map(function ($product) use ($site_url) {
 				return robbie_company_normalize_product($product, $site_url);
 			}, $decoded['products'])));
@@ -152,7 +152,7 @@ function robbie_company_normalize_most_visited_product($product, $site_url = 'ht
 
 function robbie_company_empty_data() {
 	return [
-		'company_name' => 'Robbie Company',
+		'company_name' => 'Amplif AI',
 		'products' => [],
 	];
 }
